@@ -1,7 +1,8 @@
 package siru.jpashop.repository;
 
 import org.springframework.stereotype.Repository;
-import siru.jpashop.entity.Member;
+import siru.jpashop.domain.Address;
+import siru.jpashop.domain.Member;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
