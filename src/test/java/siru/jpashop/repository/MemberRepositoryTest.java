@@ -18,15 +18,15 @@ class MemberRepositoryTest {
     public void testMember() throws Exception {
         // given
         Member member = new Member();
-        member.setUsername("siru");
+        member.setName("siru");
 
         // when
         Long savedId = memberRepository.save(member);
-        Member findMember = memberRepository.find(savedId);
+        Member findMember = memberRepository.findOne(savedId);
 
         // then
         Assertions.assertEquals(findMember.getId(), member.getId());
-        Assertions.assertEquals(findMember.getUsername(), member.getUsername());
+        Assertions.assertEquals(findMember.getName(), member.getName());
     }
 
     @Test
