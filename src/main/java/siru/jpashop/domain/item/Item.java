@@ -3,6 +3,7 @@ package siru.jpashop.domain.item;
 import lombok.Getter;
 import lombok.Setter;
 import siru.jpashop.domain.Category;
+import siru.jpashop.exception.NotEnoughStockException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,5 +27,27 @@ public abstract class Item {
 
     @ManyToMany
     private List<Category> categories  = new ArrayList<>();
+
+    //==비즈니스 로직==//
+
+    /**
+     * 재고 증가
+     * @param quantity
+     */
+    public void addStock(int quantity) {
+        this.stockQuantity += quantity;
+    }
+
+    /**
+     * 재고감소
+     * @param quantity
+     */
+    public void removeStock(int quantity) throws NotEnoughStockException {
+        int restStock = this.stockQuantity - quantity;
+        if (restStock < 0) {
+            throw new NotEnoughStockException("need more stock");
+        }
+        this.stockQuantity = restStock;
+    }
 
 }
