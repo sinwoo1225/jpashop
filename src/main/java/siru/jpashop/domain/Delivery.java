@@ -1,6 +1,8 @@
 package siru.jpashop.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import siru.jpashop.domain.item.Item;
 
