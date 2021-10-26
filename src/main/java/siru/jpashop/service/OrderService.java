@@ -3,10 +3,7 @@ package siru.jpashop.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import siru.jpashop.domain.Delivery;
-import siru.jpashop.domain.Member;
-import siru.jpashop.domain.Order;
-import siru.jpashop.domain.OrderItem;
+import siru.jpashop.domain.*;
 import siru.jpashop.domain.item.Item;
 import siru.jpashop.repository.ItemRepository;
 import siru.jpashop.repository.MemberRepository;
@@ -62,8 +59,8 @@ public class OrderService {
 
 
     // 검색
-//    public List<Order> findOrders(OrderSearch orderSearch) {
-//        return orderRepository.findAll(orderSearch);
-//    }
+    public List<Order> findOrders(OrderSearch orderSearch) {
+        return orderRepository.findAllByString(orderSearch);
+    }
 
 }
