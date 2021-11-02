@@ -1,13 +1,18 @@
 package siru.jpashop.controller;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import siru.jpashop.domain.Address;
 import siru.jpashop.domain.Order;
 import siru.jpashop.domain.OrderSearch;
+import siru.jpashop.domain.OrderStatus;
 import siru.jpashop.repository.OrderRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * XToOne
@@ -30,5 +35,33 @@ public class OrderSimpleApiController {
     public List<Order> orderV1() {
         List<Order> all = orderRepository.findAllByString(new OrderSearch());
         return all;
+    }
+
+    /**
+     * 지연로딩으로 인한 N + 1 문제발생
+     */
+    @GetMapping("/api/v2/simple-orders")
+    public List<SimpleOrderDto> ordersV2() {
+        List<Order> orders = orderRepository.findAllByString((new OrderSearch()));
+        return orders.stream()
+                .map(SimpleOrderDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Data
+    static class SimpleOrderDto {
+        private Long orderId;
+        private String name;
+        private LocalDateTime orderDate;
+        private OrderStatus orderStatus;
+        private Address address;
+
+        public SimpleOrderDto(Order order) {
+            orderId = order.getId();
+            name = order.getMember().getName();
+            orderDate = order.getOrderDate();
+            orderStatus = order.getStatus();
+            address = order.getDelivery().getAddress();
+        }
     }
 }
