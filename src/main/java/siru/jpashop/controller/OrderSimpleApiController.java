@@ -9,6 +9,8 @@ import siru.jpashop.domain.Order;
 import siru.jpashop.domain.OrderSearch;
 import siru.jpashop.domain.OrderStatus;
 import siru.jpashop.repository.OrderRepository;
+import siru.jpashop.repository.order.simplequery.OrderSimpleQueryDto;
+import siru.jpashop.repository.order.simplequery.OrderSimpleQueryRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class OrderSimpleApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
     /**
      * 엔티티를 응답객체로 반환했을때 문제점
@@ -57,6 +60,15 @@ public class OrderSimpleApiController {
         return orders.stream()
                 .map(SimpleOrderDto::new)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * dto로 적용
+     * 원하는 값만 선택해 가져옴 -> 네트웤 용량 최적화(성능 미비)
+     */
+    @GetMapping("/api/v4/simple-orders")
+    public List<OrderSimpleQueryDto> ordersV4() {
+        return orderSimpleQueryRepository.findOrderDtos();
     }
 
     @Data

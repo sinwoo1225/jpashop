@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import siru.jpashop.domain.Order;
 import siru.jpashop.domain.OrderSearch;
+import siru.jpashop.repository.order.simplequery.OrderSimpleQueryDto;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -72,8 +73,8 @@ public class OrderRepository {
 
     public List<Order> findAllWithMemberDelivery() {
         return em.createQuery("select o from Order o " +
-                "join fetch o.member m " +
-                "join fetch o.delivery d", Order.class)
+                        "join fetch o.member m " +
+                        "join fetch o.delivery d", Order.class)
                 .getResultList();
     }
 }
