@@ -3,6 +3,7 @@ package siru.jpashop.controller;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import siru.jpashop.domain.Address;
 import siru.jpashop.domain.Order;
@@ -55,8 +56,9 @@ public class OrderSimpleApiController {
      * 패치조인 적용
      */
     @GetMapping("/api/v3/simple-orders")
-    public List<SimpleOrderDto> ordersV3() {
-        List<Order> orders = orderRepository.findAllWithMemberDelivery();
+    public List<SimpleOrderDto> ordersV3(@RequestParam(value = "offset", defaultValue = "0") int offset,
+                                         @RequestParam(value = "limit", defaultValue = "100") int limit) {
+        List<Order> orders = orderRepository.findAllWithMemberDelivery(offset, limit);
         return orders.stream()
                 .map(SimpleOrderDto::new)
                 .collect(Collectors.toList());
