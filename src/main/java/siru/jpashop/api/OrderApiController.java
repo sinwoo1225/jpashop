@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import siru.jpashop.domain.*;
 import siru.jpashop.repository.OrderRepository;
+import siru.jpashop.repository.order.query.OrderQueryDto;
+import siru.jpashop.repository.order.query.OrderQueryRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class OrderApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderQueryRepository orderQueryRepository;
 
     /**
      * jackson 무한루프 방지를 위해서는 hibernate 모듈이 필요
@@ -60,6 +63,10 @@ public class OrderApiController {
         return result;
     }
 
+    /**
+     * xToOne 관계만 fetch조인 적용
+     * 컬렉션 조회는 batch fetch로 처리(application.yml에 global 설정)
+     */
     @GetMapping("/api/v3.1/orders")
     public List<OrderDto> orderV3_1(@RequestParam(value = "offset", defaultValue = "0") int offset,
                                     @RequestParam(value = "limit", defaultValue = "100") int limit) {
@@ -69,6 +76,16 @@ public class OrderApiController {
                 .collect(Collectors.toList());
 
         return result;
+    }
+
+    @GetMapping("/api/v4/orders")
+    public List<OrderQueryDto> orderV4() {
+        return orderQueryRepository.findOrderQueryDtos();
+    }
+
+    @GetMapping("/api/v5/orders")
+    public List<OrderQueryDto> orderV5() {
+        return orderQueryRepository.findAllByDto();
     }
 
     @Getter
